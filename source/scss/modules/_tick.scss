@@ -1,0 +1,15 @@
+.tick {
+	transition: opacity 0.4s;
+
+	&--positive {
+		opacity: 0.8;
+
+		color: $color-positive;
+	}
+
+	&--negative {
+		opacity: 0.8;
+
+		color: $color-negative;
+	}
+}

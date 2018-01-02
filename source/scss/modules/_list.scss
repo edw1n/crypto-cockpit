@@ -1,0 +1,12 @@
+.list {
+	margin: 0 0 $distance-m;
+	padding: 0;
+
+	list-style: none;
+}
+
+.list__item {
+	padding: $distance-s 0;
+
+	border-bottom: 1px solid $gray;
+}

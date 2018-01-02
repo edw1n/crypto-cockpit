@@ -1,0 +1,29 @@
+html {
+	box-sizing: border-box;
+	overflow-y: scroll;
+}
+
+// stylelint-disable selector-max-universal
+* {
+	&,
+	&:before,
+	&:after {
+		box-sizing: inherit; // Credit: https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/
+	}
+}
+// stylelint-enable selector-max-universal
+
+body {
+	margin: 0;
+	padding: 0;
+
+	color: $color-text;
+
+	font: 1.3rem/1.5 Arial;
+	text-rendering: optimizeLegibility;
+}
+
+input,
+button {
+	font-size: inherit;
+}
