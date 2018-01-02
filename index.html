@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue</title>
+
+    <link rel="stylesheet" media="screen" href="/dist/css/main.css" />
+</head>
+<body>
+
+<div class="grid js-app">
+    <section class="products">
+        <h1>Products</h1>
+        <ul v-if="products.length" class="list">
+            <li v-for="(product, index) in products" class="list__item">
+                <component-product v-bind:product="product" v-on:add="toggleInWatchlist(index)"></component-product>
+            </li>
+        </ul>
+        <form v-on:submit="addProduct">
+            <input type="text" name="isin" placeholder="ISIN" v-model="form.isin" required>
+            <input type="text" name="name" placeholder="Name" v-model="form.name" required>
+            <button class="button" type="submit">Add</button>
+        </form>
+    </section>
+    <section class="watchlist">
+        <h1>Watchlist</h1>
+        <ul v-if="products.length" class="list">
+            <li v-for="(product, index) in products" v-if="product.inWatchlist" class="list__item">
+                <component-watchlist v-bind:product="product" v-on:remove="toggleInWatchlist(index)"></component-watchlist>
+            </li>
+        </ul>
+        <button v-on:click="onTick">Tick</button>
+    </section>
+</div>
+
+<script src="/dist/js/bundle.js"></script>
+</body>
+</html>
