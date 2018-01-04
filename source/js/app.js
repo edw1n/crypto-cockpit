@@ -1,7 +1,7 @@
 import Vue from 'vue/dist/vue.js';
-import './components/coin';
-import './components/watchlist';
 import io from 'socket.io-client';
+import './components/chart';
+import './components/coin';
 
 const baseUrl = 'https://coincap.io';
 const socket = io.connect(baseUrl);

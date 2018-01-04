@@ -5,7 +5,10 @@ const positiveClass = 'tick--positive';
 const negativeClass = 'tick--negative';
 
 const template = `<tr>
-					<td>{{ coin.long }} {{ coin.short }}</td>
+					<td>
+						<button class="button button--unstyled font-large">
+						&#128480;</button> {{ coin.long }} <small>{{ coin.short }}</small>
+					</td>
 					<td class="text-right">{{ marketCapFormatted }}</td>
 					<td v-bind:class="[tickDirection > 0 ? 'is-positive' : '', tickDirection < 0 ? 'is-negative' : '', 'text-right']">
 						<span v-show="tickDirection > 0">&#9650;</span>

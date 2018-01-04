@@ -1,6 +1,7 @@
 table {
 	width: 100%;
 
+	background: $color-branding-dark;
 	border-collapse: collapse;
 	border-spacing: 0;
 
@@ -8,9 +9,9 @@ table {
 
 	th,
 	td {
-		padding: 1rem;
+		padding: 0.6rem;
 
-		border: 1px solid $gray;
+		border: 1px solid $color-branding;
 	}
 
 	th {
@@ -19,7 +20,11 @@ table {
 
 		text-align: left;
 
-		background: $gray-light;
+		background: $color-branding-light;
 		border-top: none;
+	}
+
+	tr:hover {
+		background-color: $color-black;
 	}
 }

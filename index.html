@@ -9,22 +9,29 @@
 <body>
 
 <div class="js-app">
-    <section class="coins">
-        <table v-if="coins.length">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th class="text-right">Market Cap</th>
-                    <th class="text-right">Price</th>
-                    <th class="text-right">Available Supply</th>
-                    <th class="text-right">%24hr</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr is="component-coin" v-for="coin in coins" v-bind:coin="coin" class="tick"></tr>
-            </tbody>
-        </table>
-    </section>
+    <div class="grid">
+        <section>
+            <table v-if="coins.length">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th class="text-right">Market Cap</th>
+                        <th class="text-right">Price</th>
+                        <th class="text-right">Available Supply</th>
+                        <th class="text-right">%24hr</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr is="component-coin" v-for="coin in coins" v-bind:coin="coin" class="tick"></tr>
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <div class="sidebar">
+                <component-chart v-bind:chart="chart"></component-chart>
+            </div>
+        </section>
+    </div>
 </div>
 
 <script src="/dist/js/bundle.js" async></script>

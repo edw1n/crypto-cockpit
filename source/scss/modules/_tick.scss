@@ -2,10 +2,10 @@
 	transition: background-color 0.3s;
 
 	&--positive {
-		background: rgba($color-positive, 0.3);
+		background: rgba($color-positive, 0.1);
 	}
 
 	&--negative {
-		background: rgba($color-negative, 0.3);
+		background: rgba($color-negative, 0.1);
 	}
 }

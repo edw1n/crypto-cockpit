@@ -1,6 +1,15 @@
 .button {
+	// vertical-align: middle;
+
 	&--unstyled {
+		padding: 0;
+
+		color: inherit;
+
+		line-height: 1;
+
 		background: none;
 		border: none;
+
 	}
 }
