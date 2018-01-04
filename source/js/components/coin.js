@@ -5,12 +5,12 @@ const positiveClass = 'tick--positive';
 const negativeClass = 'tick--negative';
 
 const template = `<tr>
-					<td>{{ coin.long }}</td>
-					<td class="text-right">{{ coin.mktcap }}</td>
-					<td class="text-right">{{ coin.price }}</td>
+					<td>{{ coin.long }} {{ coin.short }}</td>
+					<td class="text-right">{{ marketCapFormatted }}</td>
+					<td class="text-right">{{ priceFormatted }}</td>
 					<td class="text-right">{{supplyFormatted}}</td>
 					<td v-bind:class="[coin.cap24hrChange > 0 ? 'is-positive' : '', coin.cap24hrChange < 0 ? 'is-negative' : '', 'text-right']">
-						{{ coin.cap24hrChange }}%
+						{{ cap24hrChangeFormatted }}
 					</td>
 				</tr>`;
 
@@ -20,8 +20,27 @@ const coin = Vue.component('component-coin', {
 	template,
 
 	computed: {
+		marketCapFormatted() {
+			const mktcap = Math.floor(this.coin.mktcap);
+			const style = { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 };
+
+			return mktcap.toLocaleString(locale, style);
+		},
+
+		priceFormatted() {
+			const style = { style: 'currency', currency: 'EUR', minimumFractionDigits: 4, maximumFractionDigits: 8 };
+
+			return this.coin.price.toLocaleString(locale, style);
+		},
+
 		supplyFormatted() {
 			return this.coin.supply.toLocaleString(locale);
+		},
+
+		cap24hrChangeFormatted() {
+			const style = { style: 'percent', minimumFractionDigits: 2 };
+
+			return (this.coin.cap24hrChange / 100).toLocaleString(locale, style); // eslint-disable-line max-len
 		},
 	},
 
