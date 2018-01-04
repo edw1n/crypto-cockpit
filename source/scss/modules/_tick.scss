@@ -1,15 +1,11 @@
 .tick {
-	transition: opacity 0.4s;
+	transition: background-color 0.3s;
 
 	&--positive {
-		opacity: 0.8;
-
-		color: $color-positive;
+		background: rgba($color-positive, 0.3);
 	}
 
 	&--negative {
-		opacity: 0.8;
-
-		color: $color-negative;
+		background: rgba($color-negative, 0.3);
 	}
 }

@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="en" data-locale="nl-NL">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,28 +8,24 @@
 </head>
 <body>
 
-<div class="grid js-app">
-    <section class="products">
-        <h1>Products</h1>
-        <ul v-if="products.length" class="list">
-            <li v-for="(product, index) in products" class="list__item">
-                <component-product v-bind:product="product" v-on:add="toggleInWatchlist(index)"></component-product>
-            </li>
-        </ul>
-        <form v-on:submit="addProduct">
-            <input type="text" name="isin" placeholder="ISIN" v-model="form.isin" required>
-            <input type="text" name="name" placeholder="Name" v-model="form.name" required>
-            <button class="button" type="submit">Add</button>
-        </form>
-    </section>
-    <section class="watchlist">
-        <h1>Watchlist</h1>
-        <ul v-if="products.length" class="list">
-            <li v-for="(product, index) in products" v-if="product.inWatchlist" class="list__item">
-                <component-watchlist v-bind:product="product" v-on:remove="toggleInWatchlist(index)"></component-watchlist>
-            </li>
-        </ul>
-        <button v-on:click="onTick">Tick</button>
+    <div id="trade"></div>
+
+<div class="js-app">
+    <section class="coins">
+        <table v-if="coins.length">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-right">Market Cap</th>
+                    <th class="text-right">Price</th>
+                    <th class="text-right">Available Supply</th>
+                    <th class="text-right">%24hr</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr is="component-coin" v-for="coin in coins" v-bind:coin="coin" class="tick"></tr>
+            </tbody>
+        </table>
     </section>
 </div>
 

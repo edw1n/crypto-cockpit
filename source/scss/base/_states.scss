@@ -1,3 +1,15 @@
 .is-faded {
 	opacity: 0.2;
 }
+
+.is-positive {
+	color: $color-positive;
+}
+
+.is-negative {
+	color: $color-negative;
+}
+
+.text-right {
+	text-align: right;
+}
