@@ -19,11 +19,12 @@ body {
 
 	color: $color-text;
 
-	font: 1.3rem/1.5 Arial;
+	font: 1.1rem/1.5 Arial;
 	text-rendering: optimizeLegibility;
 }
 
 input,
-button {
+button,
+table {
 	font-size: inherit;
 }

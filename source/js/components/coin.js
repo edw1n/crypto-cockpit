@@ -7,7 +7,11 @@ const negativeClass = 'tick--negative';
 const template = `<tr>
 					<td>{{ coin.long }} {{ coin.short }}</td>
 					<td class="text-right">{{ marketCapFormatted }}</td>
-					<td v-bind:class="[tickDirection > 0 ? 'is-positive' : '', tickDirection < 0 ? 'is-negative' : '', 'text-right']">{{ priceFormatted }}</td>
+					<td v-bind:class="[tickDirection > 0 ? 'is-positive' : '', tickDirection < 0 ? 'is-negative' : '', 'text-right']">
+						<span v-show="tickDirection > 0">&#9650;</span>
+						<span v-show="tickDirection < 0">&#9660;</span>
+						{{ priceFormatted }}
+					</td>
 					<td class="text-right">{{supplyFormatted}}</td>
 					<td v-bind:class="[coin.cap24hrChange > 0 ? 'is-positive' : '', coin.cap24hrChange < 0 ? 'is-negative' : '', 'text-right']">
 						{{ cap24hrChangeFormatted }}
