@@ -6,7 +6,7 @@ const negativeClass = 'tick--negative';
 
 const template = `<tr>
 					<td>
-						<button class="button button--unstyled font-large">
+						<button class="button button--unstyled font-large" v-on:click="showChart()">
 						&#128480;</button> {{ coin.long }} <small>{{ coin.short }}</small>
 					</td>
 					<td class="text-right">{{ marketCapFormatted }}</td>
@@ -35,13 +35,13 @@ const coin = Vue.component('component-coin', {
 	computed: {
 		marketCapFormatted() {
 			const mktcap = Math.floor(this.coin.mktcap);
-			const style = { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 };
+			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 0 };
 
 			return mktcap.toLocaleString(locale, style);
 		},
 
 		priceFormatted() {
-			const style = { style: 'currency', currency: 'EUR', minimumFractionDigits: 4, maximumFractionDigits: 8 };
+			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 4, maximumFractionDigits: 8 };
 
 			return this.coin.price.toLocaleString(locale, style);
 		},
@@ -91,6 +91,10 @@ const coin = Vue.component('component-coin', {
 
 				el.classList.add(positive ? positiveClass : negativeClass); // eslint-disable-line max-len
 			});
+		},
+
+		showChart() {
+			this.$emit('show-chart', this.coin.short);
 		},
 	},
 });

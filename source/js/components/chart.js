@@ -1,15 +1,13 @@
 import Vue from 'vue/dist/vue.js';
 
-const template = `<div class="chart tick">hier komt een chart
+const template = `<div class="chart">
+					<div id="chart-container"></div>
 				</div>`;
 
 const chart = Vue.component('component-chart', {
 	props: ['chart'],
 
 	template,
-
-	watch: {
-	},
 
 	methods: {
 	},
