@@ -11,8 +11,8 @@
     "sass:watch": "npm run sass:build -- -w",
     "browsersync": "browser-sync start --files \"dist/css/*.css, *.html, dist/js/*.js\" --server",
     "start": "parallelshell \"npm run sass:build\" \"npm run sass:watch\" \"npm run watch:bundle\" \"npm run browsersync\"",
-    "build:bundle": "browserify source/js/app.js -o dist/js/bundle.js [ babelify --presets [ env ] ]",
-    "watch:bundle": "watchify source/js/app.js -o dist/js/bundle.js -t [ babelify --presets [ env ] ]"
+    "build:bundle": "browserify source/js/app.js -o dist/js/bundle.js [ babelify ]",
+    "watch:bundle": "watchify source/js/app.js -o dist/js/bundle.js -t [ babelify ]"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -32,6 +32,7 @@
     "watchify": "^3.9.0"
   },
   "dependencies": {
+    "highcharts": "^6.0.4",
     "socket.io": "^2.0.4",
     "vue": "^2.5.13"
   }
