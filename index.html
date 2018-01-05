@@ -22,13 +22,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr is="component-coin" v-for="coin in coins" v-bind:coin="coin" class="tick"></tr>
+                    <tr is="component-coin" v-for="coin in coins" v-bind:coin="coin" v-on:show-chart="showChart" class="tick"></tr>
                 </tbody>
             </table>
         </section>
         <section>
             <div class="sidebar">
                 <component-chart v-bind:chart="chart"></component-chart>
+
+                <table v-if="watchlist.length">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="text-right">Amount</th>
+                            <th class="text-right">Price Purchase</th>
+                            <th class="text-right">Current Price</th>
+                            <th class="text-right">Value</th>
+                            <th class="text-right">Performance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr is="component-watchlist" v-for="watchitem in watchlist" v-bind:watchitem="watchitem" v-on:trade="update(trade)"></tr>
+                    </tbody>
+                </table>
             </div>
         </section>
     </div>

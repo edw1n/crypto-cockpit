@@ -1,46 +1,79 @@
 import Vue from 'vue/dist/vue.js';
+import eventbus from '../utils/eventbus';
 
-const POSITIVE_CLASS = 'tick--positive';
-const NEGATIVE_CLASS = 'tick--negative';
-const template = `<div class="product tick">{{ product.isin }} -
-					{{ product.name }} - {{ product.performance }}
-					<button v-on:click="remove" class="button button--unstyled" title="Remove from watchlist">❌</button>
-				</div>`;
+const { locale } = document.documentElement.dataset;
+
+const template = `<tr>
+					<td>{{watchitem.long}}</td>
+					<td class="text-right">{{ watchitem.amount }}</td>
+					<td class="text-right">{{ pricePurchaseFormatted }}</td>
+					<td class="text-right">{{ priceFormatted }}</td>
+					<td class="text-right">{{ valueFormatted }}</td>
+					<td class="text-right">
+						{{ performanceValueFormatted }}
+						<span v-bind:class="[watchitem.performancePercentage > 0 ? 'is-positive' : '', watchitem.performancePercentage < 0 ? 'is-negative' : '']">
+						<span v-show="watchitem.performancePercentage > 0">&#9650;</span>
+						<span v-show="watchitem.performancePercentage < 0">&#9660;</span>
+						{{ performancePercentageFormatted }}
+						</span>
+						</td>
+				</tr>`;
 
 const watchlist = Vue.component('component-watchlist', {
-	props: ['product'],
+	props: ['watchitem'],
 
 	template,
 
-	watch: {
-		'product.performance': {
-			handler(newValue, oldValue) {
-				this.animateTick(this.$el, newValue > oldValue);
-			},
+	computed: {
+		pricePurchaseFormatted() {
+			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 4, maximumFractionDigits: 8 };
+
+			return this.watchitem.pricePurchase.toLocaleString(locale, style);
+		},
+
+		priceFormatted() {
+			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 4, maximumFractionDigits: 8 };
+
+			return this.watchitem.price.toLocaleString(locale, style);
+		},
+
+		valueFormatted() {
+			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 4, maximumFractionDigits: 8 };
+
+			return this.watchitem.value.toLocaleString(locale, style);
+		},
+
+		performanceValueFormatted() {
+			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 4, maximumFractionDigits: 8 };
+
+			return this.watchitem.performanceValue.toLocaleString(locale, style); // eslint-disable-line max-len
+		},
+
+		performancePercentageFormatted() {
+			const style = { style: 'percent', minimumFractionDigits: 2 };
+
+			return (this.watchitem.performancePercentage / 100).toLocaleString(locale, style); // eslint-disable-line max-len
 		},
 	},
 
+	mounted() {
+		eventbus.$on('trade', data => this.update(data));
+	},
+
 	methods: {
-		remove() {
-			this.$emit('remove');
-		},
+		update(trade) {
+			const { watchitem } = this;
 
-		animateTick(el, positive) {
-			return new Promise((resolve, reject) => {
-				window.requestAnimationFrame(() => {
-					function onTransitionEnd() {
-						el.removeEventListener('transitionend', onTransitionEnd);
+			if (trade.short !== watchitem.short) {
+				return;
+			}
 
-						el.classList.remove(POSITIVE_CLASS, NEGATIVE_CLASS);
+			const { pricePurchase } = watchitem;
 
-						resolve(el);
-					}
-
-					el.addEventListener('transitionend', onTransitionEnd, false);
-
-					el.classList.add(positive ? POSITIVE_CLASS : NEGATIVE_CLASS); // eslint-disable-line max-len
-				});
-			});
+			watchitem.value = trade.price * watchitem.amount;
+			watchitem.performanceValue = (trade.price - watchitem.pricePurchase) * watchitem.amount; // eslint-disable-line max-len
+			watchitem.performancePercentage = (trade.price - pricePurchase) / pricePurchase * 100; // eslint-disable-line max-len
+			watchitem.price = trade.price;
 		},
 	},
 });
