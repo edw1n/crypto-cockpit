@@ -1,0 +1,33 @@
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.loader {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	z-index: 3;
+
+	font-size: 4rem;
+
+	background: rgba($color-black, 0.8);
+
+	&:after {
+		position: inherit;
+		top: 43%;
+		left: 48%;
+
+		animation: rotate 0.8s infinite;
+
+		content: '🤑';
+	}
+}

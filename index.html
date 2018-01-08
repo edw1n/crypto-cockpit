@@ -11,6 +11,7 @@
 <div class="js-app">
     <div class="grid">
         <section>
+            <h1>Coins</h1>
             <table v-if="coins.length">
                 <thead>
                     <tr>
@@ -30,12 +31,14 @@
             <div class="sidebar">
                 <component-chart v-bind:chart="chart"></component-chart>
 
+                <h1>Watchlist</h1>
+
                 <table v-if="watchlist.length">
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th class="text-right">Amount</th>
-                            <th class="text-right">Price Purchase</th>
+                            <th class="text-right">Purchase Price</th>
                             <th class="text-right">Current Price</th>
                             <th class="text-right">Value</th>
                             <th class="text-right">Performance</th>
@@ -48,6 +51,7 @@
             </div>
         </section>
     </div>
+    <component-loader v-bind:is-loading="isLoading"></component-loader>
 </div>
 
 <script src="/dist/js/bundle.js" async></script>

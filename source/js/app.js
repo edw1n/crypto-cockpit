@@ -5,6 +5,7 @@ import io from 'socket.io-client';
 import './components/chart';
 import './components/coin';
 import './components/watchlist';
+import './components/loader';
 
 const baseUrl = 'https://coincap.io';
 const socket = io.connect(baseUrl);
@@ -14,13 +15,14 @@ const app = new Vue({
 
 	data() {
 		return {
+			isLoading: false,
 			chart: [],
 			coins: [],
 			watchlist: [{
 				long: 'Bitcoin',
 				short: 'BTC',
-				amount: 1,
-				pricePurchase: 16583.1,
+				amount: 10,
+				pricePurchase: 822.45,
 				price: 0,
 				value: 0,
 				performancePercentage: 0,
@@ -57,8 +59,12 @@ const app = new Vue({
 
 	methods: {
 		async getData(url) {
+			this.isLoading = true;
+
 			const result = await fetch(url);
 			const json = await result.json();
+
+			this.isLoading = false;
 
 			return json;
 		},
