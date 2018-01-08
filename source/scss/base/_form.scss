@@ -1,0 +1,13 @@
+input,
+select {
+	padding: 0.8rem;
+
+	font-size: inherit;
+
+	background: $color-gray-light;
+	border: none;
+}
+
+input {
+	padding: calc(0.8rem + 1px);
+}

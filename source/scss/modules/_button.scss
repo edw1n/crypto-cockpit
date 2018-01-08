@@ -1,4 +1,8 @@
 .button {
+	color: $color-text;
+
+	background-color: $color-branding-light;
+
 	&--unstyled {
 		padding: 0;
 
@@ -8,6 +12,5 @@
 
 		background: none;
 		border: none;
-
 	}
 }

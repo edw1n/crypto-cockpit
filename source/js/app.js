@@ -2,6 +2,7 @@ import Vue from 'vue/dist/vue.js';
 import eventbus from './utils/eventbus';
 import Highcharts from 'highcharts';
 import io from 'socket.io-client';
+
 import './components/chart';
 import './components/coin';
 import './components/watchlist';
@@ -46,6 +47,11 @@ const app = new Vue({
 				performancePercentage: 0,
 				performanceValue: 0,
 			}],
+			watchlistForm: {
+				coin: null,
+				pricePurchase: null,
+				amount: null,
+			},
 		};
 	},
 
@@ -71,6 +77,7 @@ const app = new Vue({
 
 		setData(json) {
 			this.coins = json;
+			this.coins.forEach(this.updateWatchlist);
 		},
 
 		onTrade(trade) {
@@ -85,12 +92,26 @@ const app = new Vue({
 			}
 		},
 
-		updateWatchlist(trade) {
-			const coinInWatchlist = this.watchlist.find(w => trade.short === w.short); // eslint-disable-line max-len
+		onSubmitForm(e) {
+			e.preventDefault();
 
-			if (coinInWatchlist) {
-				eventbus.$emit('trade', trade);
+			const { watchlistForm } = this;
+			const coin = this.coins.find(c => c.short === watchlistForm.coin);
+			const data = Object.assign({}, coin, watchlistForm);
+
+			this.watchlist.push(data);
+		},
+
+		updateWatchlist(trade) {
+			const coinsInWatchlist = this.watchlist.filter(w => trade.short === w.short); // eslint-disable-line max-len
+
+			if (!coinsInWatchlist.length) {
+				return;
 			}
+
+			coinsInWatchlist.forEach((c) => {
+				c.price = trade.price;
+			});
 		},
 
 		async showChart(coin) {

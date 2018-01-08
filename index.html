@@ -9,10 +9,10 @@
 <body>
 
 <div class="js-app">
-    <div class="grid">
+    <div class="grid" v-if="coins.length">
         <section>
             <h1>Coins</h1>
-            <table v-if="coins.length">
+            <table>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -45,9 +45,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr is="component-watchlist" v-for="watchitem in watchlist" v-bind:watchitem="watchitem" v-on:trade="update(trade)"></tr>
+                        <tr is="component-watchlist" v-for="watchitem in watchlist"
+                            v-bind:long="watchitem.long"
+                            v-bind:short="watchitem.short"
+                            v-bind:price-purchase="watchitem.pricePurchase"
+                            v-bind:price="watchitem.price"
+                            v-bind:value="watchitem.value"
+                            v-bind:amount="watchitem.amount"
+                            v-on:trade="update(trade)"></tr>
                     </tbody>
                 </table>
+
+                <h2>Add coin</h2>
+
+                <form class="form" v-on:submit="onSubmitForm">
+                    <select v-model="watchlistForm.coin" name="coin">
+                        <option v-bind:value="coin.short" v-for="coin in coins">{{coin.long}}</option>
+                    </select>
+                    <input v-model.number="watchlistForm.pricePurchase" type="number" placeholder="Price" name="pricePurchase" required>
+                    <input v-model.number="watchlistForm.amount" type="number" placeholder="Amount" name="amount" required>
+                    <input type="submit" value="Add" class="button">
+                </form>
             </div>
         </section>
     </div>
