@@ -6,13 +6,13 @@ const negativeClass = 'tick--negative';
 
 const template = `<tr>
 					<td>
-						<button class="button button--unstyled font-large" v-on:click="showChart()">
-						&#128480;</button> {{ coin.long }} <small>{{ coin.short }}</small>
+						<button class="button button--unstyled font-large" v-on:click="showChart()">&#128480;</button>
+						{{ coin.long }} <small>{{ coin.short }}</small>
 					</td>
 					<td class="text-right">{{ marketCapFormatted }}</td>
-					<td v-bind:class="[tickDirection > 0 ? 'is-positive' : '', tickDirection < 0 ? 'is-negative' : '', 'text-right']">
-						<span v-show="tickDirection > 0">&#9650;</span>
-						<span v-show="tickDirection < 0">&#9660;</span>
+					<td v-bind:class="[coin.tickDirection > 0 ? 'is-positive' : '', coin.tickDirection < 0 ? 'is-negative' : '', 'text-right']">
+						<span v-show="coin.tickDirection > 0">&#9650;</span>
+						<span v-show="coin.tickDirection < 0">&#9660;</span>
 						{{ priceFormatted }}
 					</td>
 					<td class="text-right">{{supplyFormatted}}</td>
@@ -23,12 +23,6 @@ const template = `<tr>
 
 const coin = Vue.component('component-coin', {
 	props: ['coin'],
-
-	data() {
-		return {
-			tickDirection: 0,
-		};
-	},
 
 	template,
 
@@ -60,8 +54,6 @@ const coin = Vue.component('component-coin', {
 	watch: {
 		'coin.price': {
 			handler(newValue, oldValue) {
-				this.tickDirection = newValue > oldValue ? 1 : -1;
-
 				this.animateTick(this.$el, newValue > oldValue);
 			},
 		},

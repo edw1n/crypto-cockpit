@@ -1,0 +1,31 @@
+.paging {
+	margin: 0;
+	padding: 0;
+}
+
+.paging__link {
+	cursor: pointer;
+
+	display: inline-block;
+
+	width: $distance-l * 2;
+	padding: $distance-s;
+
+	color: $color-text;
+
+	background-color: transparent;
+	border: none;
+
+	&.is-active {
+		color: $color-branding-dark;
+
+		background-color: $color-gray;
+	}
+
+	&[disabled] {
+		cursor: default;
+
+		opacity: 0.2;
+	}
+}
+

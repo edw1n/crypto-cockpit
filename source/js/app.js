@@ -1,8 +1,8 @@
 import Vue from 'vue/dist/vue.js';
-import eventbus from './utils/eventbus';
 import Highcharts from 'highcharts';
 import io from 'socket.io-client';
 
+import './components/pagination';
 import './components/chart';
 import './components/coin';
 import './components/watchlist';
@@ -19,6 +19,12 @@ const app = new Vue({
 			isLoading: false,
 			chart: [],
 			coins: [],
+
+			search: '',
+
+			perPage: 20,
+			currentPage: 0,
+
 			watchlist: [{
 				long: 'Bitcoin',
 				short: 'BTC',
@@ -55,6 +61,37 @@ const app = new Vue({
 		};
 	},
 
+	watch: {
+		search() {
+			this.currentPage = 0;
+		},
+
+		perPage() {
+			this.currentPage = 0;
+		},
+	},
+
+	computed: {
+		coinsFiltered() {
+			return this.coins.filter(c => c.long.toLowerCase().includes(this.search.toLowerCase()));
+		},
+
+		totalPages() {
+			return Math.ceil(this.coinsFiltered.length / this.perPage);
+		},
+
+		coinsOnPage() {
+			if (!this.coins) {
+				return [];
+			}
+
+			const start = this.currentPage * this.perPage;
+			const end = Math.min(start + this.perPage, this.coinsFiltered.length);
+
+			return this.coinsFiltered.slice(start, end);
+		},
+	},
+
 	async mounted() {
 		const data = await this.getData(`${baseUrl}/front`);
 
@@ -83,13 +120,15 @@ const app = new Vue({
 		onTrade(trade) {
 			const coin = this.coins.find(c => c.short === trade.msg.short);
 
-			if (coin) {
-				Object.assign(coin, trade.msg);
-
-				this.updateWatchlist(trade.msg);
-			} else {
-				this.coins.push(trade.msg);
+			if (!coin) {
+				return;
 			}
+
+			const direction = trade.msg.price > coin.price ? 1 : -1;
+
+			Object.assign(coin, trade.msg, { tickDirection: direction });
+
+			this.updateWatchlist(trade.msg);
 		},
 
 		onSubmitForm(e) {
@@ -118,6 +157,10 @@ const app = new Vue({
 			const data = await this.getData(`${baseUrl}/history/365day/${coin}`);
 
 			this.renderChart(data.price);
+		},
+
+		onPageSelected(page) {
+			this.currentPage = page;
 		},
 
 		renderChart(data) {

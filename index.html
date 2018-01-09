@@ -12,6 +12,16 @@
     <div class="grid" v-if="coins.length">
         <section>
             <h1>Coins</h1>
+
+            <input type="text" v-model="search" />
+            <select v-model.number="perPage">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+            </select>
+
             <table>
                 <thead>
                     <tr>
@@ -23,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr is="component-coin" v-for="coin in coins" v-bind:coin="coin" v-on:show-chart="showChart" class="tick"></tr>
+                    <tr is="component-coin" v-for="coin in coinsOnPage" v-bind:key="coin.short" v-bind:coin="coin" v-on:show-chart="showChart" class="tick"></tr>
                 </tbody>
             </table>
         </section>
@@ -70,6 +80,12 @@
         </section>
     </div>
     <component-loader v-bind:is-loading="isLoading"></component-loader>
+
+    <component-pagination
+        v-bind:total-pages="totalPages"
+        v-bind:current-page="currentPage"
+        v-bind:per-page="perPage"
+        v-on:selected="onPageSelected"></component-pagination>
 </div>
 
 <script src="/dist/js/bundle.js" async></script>
