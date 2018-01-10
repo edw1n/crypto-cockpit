@@ -39,7 +39,7 @@
         </section>
         <section>
             <div class="sidebar">
-                <component-chart v-bind:chart="chart"></component-chart>
+                <component-chart v-bind:chart="chart" v-on:change-period="getChartData(coin, period)"></component-chart>
 
                 <h1>Watchlist</h1>
 
@@ -47,10 +47,11 @@
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th class="text-right">Investment</th>
                             <th class="text-right">Amount</th>
                             <th class="text-right">Purchase Price</th>
                             <th class="text-right">Current Price</th>
-                            <th class="text-right">Value</th>
+                            <th class="text-right">Current Value</th>
                             <th class="text-right">Performance</th>
                         </tr>
                     </thead>
@@ -62,6 +63,7 @@
                             v-bind:price="watchitem.price"
                             v-bind:value="watchitem.value"
                             v-bind:amount="watchitem.amount"
+                            v-bind:investment="watchitem.investment"
                             v-on:trade="update(trade)"></tr>
                     </tbody>
                 </table>
@@ -69,11 +71,11 @@
                 <h2>Add coin</h2>
 
                 <form class="form" v-on:submit="onSubmitForm">
-                    <select v-model="watchlistForm.coin" name="coin">
+                    <select v-model="watchlistForm.coin" name="coin" required>
                         <option v-bind:value="coin.short" v-for="coin in coins">{{coin.long}}</option>
                     </select>
-                    <input v-model.number="watchlistForm.pricePurchase" type="number" placeholder="Price" name="pricePurchase" required>
-                    <input v-model.number="watchlistForm.amount" type="number" placeholder="Amount" name="amount" required>
+                    <input v-model.number="watchlistForm.investment" type="number" min="0" placeholder="Amount to invest ($)" name="investment" required>
+                    <!-- <input v-model.number="watchlistForm.amount" type="number" min="0" placeholder="Amount" name="amount" required> -->
                     <input type="submit" value="Add" class="button">
                 </form>
             </div>
@@ -85,7 +87,8 @@
         v-bind:total-pages="totalPages"
         v-bind:current-page="currentPage"
         v-bind:per-page="perPage"
-        v-on:selected="onPageSelected"></component-pagination>
+        v-on:selected="onPageSelected">
+    </component-pagination>
 </div>
 
 <script src="/dist/js/bundle.js" async></script>

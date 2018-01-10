@@ -35,7 +35,7 @@ const coin = Vue.component('component-coin', {
 		},
 
 		priceFormatted() {
-			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 4, maximumFractionDigits: 8 };
+			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 8 };
 
 			return this.coin.price.toLocaleString(locale, style);
 		},

@@ -1,5 +1,4 @@
 import Vue from 'vue/dist/vue.js';
-import Highcharts from 'highcharts';
 import io from 'socket.io-client';
 
 import './components/pagination';
@@ -17,6 +16,7 @@ const app = new Vue({
 	data() {
 		return {
 			isLoading: false,
+
 			chart: [],
 			coins: [],
 
@@ -25,37 +25,10 @@ const app = new Vue({
 			perPage: 20,
 			currentPage: 0,
 
-			watchlist: [{
-				long: 'Bitcoin',
-				short: 'BTC',
-				amount: 10,
-				pricePurchase: 822.45,
-				price: 0,
-				value: 0,
-				performancePercentage: 0,
-				performanceValue: 0,
-			}, {
-				long: 'Bitcoin',
-				short: 'BTC',
-				amount: 2,
-				pricePurchase: 13892.6,
-				price: 0,
-				value: 0,
-				performancePercentage: 0,
-				performanceValue: 0,
-			}, {
-				long: 'Ripple',
-				short: 'XRP',
-				amount: 5,
-				pricePurchase: 3.20485,
-				price: 0,
-				value: 0,
-				performancePercentage: 0,
-				performanceValue: 0,
-			}],
+			watchlist: [],
 			watchlistForm: {
 				coin: null,
-				pricePurchase: null,
+				investment: null,
 				amount: null,
 			},
 		};
@@ -73,7 +46,7 @@ const app = new Vue({
 
 	computed: {
 		coinsFiltered() {
-			return this.coins.filter(c => c.long.toLowerCase().includes(this.search.toLowerCase()));
+			return this.coins.filter(c => c.long.toLowerCase().includes(this.search.toLowerCase())); // eslint-disable-line max-len
 		},
 
 		totalPages() {
@@ -86,13 +59,15 @@ const app = new Vue({
 			}
 
 			const start = this.currentPage * this.perPage;
-			const end = Math.min(start + this.perPage, this.coinsFiltered.length);
+			const end = Math.min(start + this.perPage, this.coinsFiltered.length); // eslint-disable-line max-len
 
 			return this.coinsFiltered.slice(start, end);
 		},
 	},
 
 	async mounted() {
+		this.getWatchlistData();
+
 		const data = await this.getData(`${baseUrl}/front`);
 
 		this.setData(data);
@@ -136,9 +111,23 @@ const app = new Vue({
 
 			const { watchlistForm } = this;
 			const coin = this.coins.find(c => c.short === watchlistForm.coin);
+
+			watchlistForm.amount = Number((watchlistForm.investment / coin.price).toFixed(8)); // eslint-disable-line max-len
+			watchlistForm.pricePurchase = coin.price;
+
 			const data = Object.assign({}, coin, watchlistForm);
 
 			this.watchlist.push(data);
+
+			localStorage.setItem('watchlist', JSON.stringify(this.watchlist));
+		},
+
+		getWatchlistData() {
+			const watchlist = JSON.parse(localStorage.getItem('watchlist'));
+
+			if (watchlist) {
+				this.watchlist = watchlist;
+			}
 		},
 
 		updateWatchlist(trade) {
@@ -153,65 +142,23 @@ const app = new Vue({
 			});
 		},
 
-		async showChart(coin) {
-			const data = await this.getData(`${baseUrl}/history/365day/${coin}`);
+		async getChartData(period, coin) {
+			const data = await this.getData(`${baseUrl}/history/${period}/${coin}`);
 
-			this.renderChart(data.price);
+			console.log(data);
+
+			this.chart = data.price;
+		},
+
+		showChart(coin) {
+			console.log(coin);
+			// const data = await this.getData(`${baseUrl}/history/365day/${coin}`);
+
+			// this.renderChart(data.price);
 		},
 
 		onPageSelected(page) {
 			this.currentPage = page;
-		},
-
-		renderChart(data) {
-			Highcharts.chart('chart-container', {
-				credits: {
-					enabled: false,
-				},
-				chart: {
-					backgroundColor: 'transparent',
-					borderRadius: 0,
-					pinchType: '',
-					spacingRight: 0,
-					spacingBottom: 0,
-					spacingLeft: 0,
-					zoomType: '',
-				},
-				legend: {
-					enabled: false,
-				},
-				series: [{
-					color: '#79d1ff',
-					data,
-				}],
-				title: {
-					text: null,
-				},
-				xAxis: {
-					labels: {
-					},
-					dateTimeLabelFormats: {
-						day: '%e %b',
-						second: '%H:%M',
-					},
-					lineColor: '#262d33',
-					tickColor: '#262d33',
-					type: 'datetime',
-				},
-				yAxis: {
-					labels: {
-						align: 'center',
-						x: -30,
-					},
-					gridLineColor: '#262d33',
-					gridLineWidth: 1,
-					lineColor: '#262d33',
-					lineWidth: 1,
-					title: {
-						text: null,
-					},
-				},
-			});
 		},
 	},
 });
