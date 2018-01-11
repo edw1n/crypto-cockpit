@@ -6,7 +6,6 @@ const negativeClass = 'tick--negative';
 
 const template = `<tr>
 					<td>
-						<button class="button button--unstyled font-large" v-on:click="showChart()">&#128480;</button>
 						{{ coin.long }} <small>{{ coin.short }}</small>
 					</td>
 					<td class="text-right">{{ marketCapFormatted }}</td>
@@ -18,6 +17,10 @@ const template = `<tr>
 					<td class="text-right">{{supplyFormatted}}</td>
 					<td v-bind:class="[coin.cap24hrChange > 0 ? 'is-positive' : '', coin.cap24hrChange < 0 ? 'is-negative' : '', 'text-right']">
 						{{ cap24hrChangeFormatted }}
+					</td>
+					<td class="text-center">
+						<button class="button button--unstyled">&#9734;</button>
+						<button class="button button--unstyled" v-on:click="showChart()">&#128480;</button>
 					</td>
 				</tr>`;
 
@@ -86,7 +89,7 @@ const coin = Vue.component('component-coin', {
 		},
 
 		showChart() {
-			this.$emit('show-chart', this.coin.short);
+			this.$emit('active-coin', this.coin.short);
 		},
 	},
 });

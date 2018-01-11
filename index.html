@@ -30,16 +30,21 @@
                         <th class="text-right">Price</th>
                         <th class="text-right">Available Supply</th>
                         <th class="text-right">%24hr</th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr is="component-coin" v-for="coin in coinsOnPage" v-bind:key="coin.short" v-bind:coin="coin" v-on:show-chart="showChart" class="tick"></tr>
+                    <tr is="component-coin" v-for="coin in coinsOnPage" v-bind:key="coin.short" v-bind:coin="coin" v-on:active-coin="setActiveCoin" class="tick"></tr>
                 </tbody>
             </table>
         </section>
         <section>
             <div class="sidebar">
-                <component-chart v-bind:chart="chart" v-on:change-period="getChartData(coin, period)"></component-chart>
+                <component-detail v-bind:coin="activeCoinData" v-show="activeCoin"></component-detail>
+                <component-chart
+                    v-if="activeCoin"
+                    v-bind:coin="activeCoinData">
+                </component-chart>
 
                 <h1>Watchlist</h1>
 

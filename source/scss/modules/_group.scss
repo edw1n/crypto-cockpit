@@ -1,0 +1,18 @@
+.group {
+	display: flex;
+
+	border: 1px solid $color-branding;
+}
+
+.group__item {
+	flex-grow: 1;
+
+	padding: $distance-l;
+
+	border-right: 1px solid $color-branding;
+}
+
+.group__label {
+	margin: 0;
+	padding: 0;
+}

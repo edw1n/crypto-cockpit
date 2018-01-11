@@ -4,11 +4,12 @@ import io from 'socket.io-client';
 import './components/pagination';
 import './components/chart';
 import './components/coin';
+import './components/detail';
 import './components/watchlist';
 import './components/loader';
 
-const baseUrl = 'https://coincap.io';
-const socket = io.connect(baseUrl);
+const BASE_URL = 'https://coincap.io';
+const SOCKET = io.connect(BASE_URL);
 
 const app = new Vue({
 	el: '.js-app',
@@ -17,8 +18,8 @@ const app = new Vue({
 		return {
 			isLoading: false,
 
-			chart: [],
 			coins: [],
+			activeCoin: null,
 
 			search: '',
 
@@ -45,6 +46,10 @@ const app = new Vue({
 	},
 
 	computed: {
+		activeCoinData() {
+			return this.coins.find(c => c.short === this.activeCoin) || {};
+		},
+
 		coinsFiltered() {
 			return this.coins.filter(c => c.long.toLowerCase().includes(this.search.toLowerCase())); // eslint-disable-line max-len
 		},
@@ -68,11 +73,11 @@ const app = new Vue({
 	async mounted() {
 		this.getWatchlistData();
 
-		const data = await this.getData(`${baseUrl}/front`);
+		const data = await this.getData(`${BASE_URL}/front`);
 
 		this.setData(data);
 
-		socket.on('trades', trade => this.onTrade(trade));
+		SOCKET.on('trades', trade => this.onTrade(trade));
 	},
 
 	methods: {
@@ -90,6 +95,10 @@ const app = new Vue({
 		setData(json) {
 			this.coins = json;
 			this.coins.forEach(this.updateWatchlist);
+		},
+
+		setActiveCoin(coin) {
+			this.activeCoin = coin;
 		},
 
 		onTrade(trade) {
@@ -140,21 +149,6 @@ const app = new Vue({
 			coinsInWatchlist.forEach((c) => {
 				c.price = trade.price;
 			});
-		},
-
-		async getChartData(period, coin) {
-			const data = await this.getData(`${baseUrl}/history/${period}/${coin}`);
-
-			console.log(data);
-
-			this.chart = data.price;
-		},
-
-		showChart(coin) {
-			console.log(coin);
-			// const data = await this.getData(`${baseUrl}/history/365day/${coin}`);
-
-			// this.renderChart(data.price);
 		},
 
 		onPageSelected(page) {
