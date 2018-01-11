@@ -9,11 +9,11 @@
 <body>
 
 <div class="js-app">
-    <div class="grid" v-if="coins.length">
+    <div class="grid"> <!-- v-if="coins.length" -->
         <section>
             <h1>Coins</h1>
 
-            <input type="text" v-model="search" />
+            <!-- <input type="text" v-model="search" /> -->
             <select v-model.number="perPage">
                 <option value="10">10</option>
                 <option value="20">20</option>
@@ -40,11 +40,11 @@
         </section>
         <section>
             <div class="sidebar">
-                <component-detail v-bind:coin="activeCoinData" v-show="activeCoin"></component-detail>
+                <!-- <component-detail v-bind:coin="activeCoinData" v-show="activeCoin"></component-detail>
                 <component-chart
                     v-if="activeCoin"
                     v-bind:coin="activeCoinData">
-                </component-chart>
+                </component-chart> -->
 
                 <h1>Watchlist</h1>
 
@@ -75,27 +75,26 @@
 
                 <h2>Add coin</h2>
 
-                <form class="form" v-on:submit="onSubmitForm">
+                <!-- <form class="form" v-on:submit="onSubmitForm">
                     <select v-model="watchlistForm.coin" name="coin" required>
                         <option v-bind:value="coin.short" v-for="coin in coins">{{coin.long}}</option>
                     </select>
                     <input v-model.number="watchlistForm.investment" type="number" min="0" placeholder="Amount to invest ($)" name="investment" required>
-                    <!-- <input v-model.number="watchlistForm.amount" type="number" min="0" placeholder="Amount" name="amount" required> -->
                     <input type="submit" value="Add" class="button">
-                </form>
+                </form> -->
             </div>
         </section>
     </div>
     <component-loader v-bind:is-loading="isLoading"></component-loader>
 
-    <component-pagination
+    <!-- <component-pagination
         v-bind:total-pages="totalPages"
         v-bind:current-page="currentPage"
         v-bind:per-page="perPage"
         v-on:selected="onPageSelected">
-    </component-pagination>
+    </component-pagination> -->
 </div>
 
-<script src="/dist/js/bundle.js" async></script>
+<script type="module" src="/dist/js/bundle.js" async></script>
 </body>
 </html>

@@ -1,104 +1,67 @@
 import Vue from 'vue/dist/vue.js';
-import io from 'socket.io-client';
+import { mapGetters, mapState } from 'vuex';
 
-import './components/pagination';
-import './components/chart';
-import './components/coin';
-import './components/detail';
-import './components/watchlist';
-import './components/loader';
+// import io from 'socket.io-client';
 
-const BASE_URL = 'https://coincap.io';
-const SOCKET = io.connect(BASE_URL);
+import store from './store';
+
+// import './components/pagination';
+// import './components/chart';
+import Coin from './components/coin';
+// import './components/detail';
+// import './components/watchlist';
+import Loader from './components/loader';
+
+// const BASE_URL = 'https://coincap.io';
+// const SOCKET = io.connect(BASE_URL);
 
 const app = new Vue({
 	el: '.js-app',
+	store,
 
-	data() {
-		return {
-			isLoading: false,
+	// watch: {
+	// 	search() {
+	// 		this.currentPage = 0;
+	// 	},
 
-			coins: [],
-			activeCoin: null,
+	// 	perPage() {
+	// 		this.currentPage = 0;
+	// 	},
+	// },
 
-			search: '',
-
-			perPage: 20,
-			currentPage: 0,
-
-			watchlist: [],
-			watchlistForm: {
-				coin: null,
-				investment: null,
-				amount: null,
-			},
-		};
+	components: {
+		Coin,
+		Loader,
 	},
 
-	watch: {
-		search() {
-			this.currentPage = 0;
-		},
+	// map this.xx to store.state.xx
+	computed: Object.assign(mapState([
+		'coins',
+		'isLoading',
+		'currentPage',
+		'perPage',
+		'watchlist',
+	]), mapGetters([
+		'coinsOnPage',
+		'totalPages',
+	])),
 
-		perPage() {
-			this.currentPage = 0;
-		},
-	},
+	mounted() {
+		console.log('mounted app', this.$store);
 
-	computed: {
-		activeCoinData() {
-			return this.coins.find(c => c.short === this.activeCoin) || {};
-		},
+		this.$store.dispatch('getData');
 
-		coinsFiltered() {
-			return this.coins.filter(c => c.long.toLowerCase().includes(this.search.toLowerCase())); // eslint-disable-line max-len
-		},
-
-		totalPages() {
-			return Math.ceil(this.coinsFiltered.length / this.perPage);
-		},
-
-		coinsOnPage() {
-			if (!this.coins) {
-				return [];
-			}
-
-			const start = this.currentPage * this.perPage;
-			const end = Math.min(start + this.perPage, this.coinsFiltered.length); // eslint-disable-line max-len
-
-			return this.coinsFiltered.slice(start, end);
-		},
-	},
-
-	async mounted() {
-		this.getWatchlistData();
-
-		const data = await this.getData(`${BASE_URL}/front`);
-
-		this.setData(data);
-
-		SOCKET.on('trades', trade => this.onTrade(trade));
+		// SOCKET.on('trades', trade => this.onTrade(trade));
 	},
 
 	methods: {
-		async getData(url) {
-			this.isLoading = true;
-
-			const result = await fetch(url);
-			const json = await result.json();
-
-			this.isLoading = false;
-
-			return json;
-		},
-
-		setData(json) {
-			this.coins = json;
-			this.coins.forEach(this.updateWatchlist);
-		},
+		// setData(json) {
+		// 	this.coins = json;
+		// 	this.coins.forEach(this.updateWatchlist);
+		// },
 
 		setActiveCoin(coin) {
-			this.activeCoin = coin;
+			this.$store.commit('activeCoin', coin);
 		},
 
 		onTrade(trade) {
@@ -152,7 +115,7 @@ const app = new Vue({
 		},
 
 		onPageSelected(page) {
-			this.currentPage = page;
+			this.$store.commit('page', page);
 		},
 	},
 });

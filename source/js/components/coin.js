@@ -1,4 +1,5 @@
 import Vue from 'vue/dist/vue.js';
+// import { mapState } from 'vuex';
 
 const { locale } = document.documentElement.dataset;
 const positiveClass = 'tick--positive';
