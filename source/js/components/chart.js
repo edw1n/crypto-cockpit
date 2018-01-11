@@ -17,6 +17,12 @@ const config = {
 	legend: {
 		enabled: false,
 	},
+	loading: {
+		style: {
+			backgroundColor: '#13181c',
+			opacity: 0.75,
+		},
+	},
 	series: [{
 		color: '#79d1ff',
 		id: 'Price',
@@ -129,8 +135,12 @@ const chart = Vue.component('component-chart', {
 				url = `http://coincap.io/history/${this.coin.short}`;
 			}
 
+			this.chart.showLoading('loading...');
+
 			const result = await fetch(url);
 			const json = await result.json();
+
+			this.chart.hideLoading();
 
 			json.price.pop();
 
