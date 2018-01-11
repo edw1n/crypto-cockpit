@@ -1,11 +1,8 @@
-import Vue from 'vue/dist/vue.js';
+// import Vue from 'vue/dist/vue.js';
+import { mapState } from 'vuex';
 
-const template = '<div class="loader" v-show="isLoading"></div>';
+export default {
+	template: '<div class="loader" v-show="isLoading"></div>',
 
-const loader = Vue.component('component-loader', {
-	props: ['isLoading'],
-
-	template,
-});
-
-export default loader;
+	computed: mapState(['isLoading']),
+};

@@ -1,7 +1,13 @@
 import Vue from 'vue/dist/vue.js';
 import Vuex from 'vuex';
 
+// import io from 'socket.io-client';
+
 const BASE_URL = 'https://coincap.io';
+
+// const SOCKET = io.connect(BASE_URL);
+
+const { locale } = document.documentElement.dataset;
 
 Vue.use(Vuex);
 
@@ -9,6 +15,8 @@ export default new Vuex.Store({
 	strict: true,
 
 	state: {
+		locale,
+
 		isLoading: false,
 
 		coins: [],
@@ -28,8 +36,6 @@ export default new Vuex.Store({
 	},
 
 	getters: {
-		activeCoinData: state => state.coins.find(c => c.short === state.activeCoin) || {},
-
 		coinsFiltered: state => state.coins.filter(c => c.long.toLowerCase().includes(state.search.toLowerCase())),
 
 		totalPages: (state, getters) => Math.ceil(getters.coinsFiltered.length / state.perPage),

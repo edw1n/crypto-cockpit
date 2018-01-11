@@ -1,8 +1,6 @@
 import Vue from 'vue/dist/vue.js';
 import { mapGetters, mapState } from 'vuex';
 
-// import io from 'socket.io-client';
-
 import store from './store';
 
 // import './components/pagination';
@@ -11,9 +9,6 @@ import Coin from './components/coin';
 // import './components/detail';
 // import './components/watchlist';
 import Loader from './components/loader';
-
-// const BASE_URL = 'https://coincap.io';
-// const SOCKET = io.connect(BASE_URL);
 
 const app = new Vue({
 	el: '.js-app',
@@ -30,14 +25,13 @@ const app = new Vue({
 	// },
 
 	components: {
-		Coin,
-		Loader,
+		'component-coin': Coin,
+		'component-loader': Loader,
 	},
 
 	// map this.xx to store.state.xx
 	computed: Object.assign(mapState([
 		'coins',
-		'isLoading',
 		'currentPage',
 		'perPage',
 		'watchlist',
@@ -59,10 +53,6 @@ const app = new Vue({
 		// 	this.coins = json;
 		// 	this.coins.forEach(this.updateWatchlist);
 		// },
-
-		setActiveCoin(coin) {
-			this.$store.commit('activeCoin', coin);
-		},
 
 		onTrade(trade) {
 			const coin = this.coins.find(c => c.short === trade.msg.short);

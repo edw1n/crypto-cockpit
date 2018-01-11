@@ -34,7 +34,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr is="component-coin" v-for="coin in coinsOnPage" v-bind:key="coin.short" v-bind:coin="coin" v-on:active-coin="setActiveCoin" class="tick"></tr>
+                    <tr is="component-coin"
+                        v-for="coin in coinsOnPage"
+                        v-bind:key="coin.short"
+                        v-bind:coin="coin"
+                        class="tick">
+                    </tr>
                 </tbody>
             </table>
         </section>
@@ -85,7 +90,7 @@
             </div>
         </section>
     </div>
-    <component-loader v-bind:is-loading="isLoading"></component-loader>
+    <component-loader></component-loader>
 
     <!-- <component-pagination
         v-bind:total-pages="totalPages"
