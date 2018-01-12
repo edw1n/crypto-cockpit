@@ -9,7 +9,7 @@
 <body>
 
 <div class="js-app">
-    <div class="grid" v-if="coins.length">
+    <div class="grid"> <!-- v-if="coins.length" -->
         <section>
             <h1>Coins</h1>
 
@@ -40,17 +40,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr is="component-coin" v-for="coin in coinsOnPage" v-bind:key="coin.short" v-bind:coin="coin" v-on:active-coin="setActiveCoin" class="tick"></tr>
+                    <tr is="component-coin"
+                        v-for="coin in coinsOnPage"
+                        v-bind:key="coin.short"
+                        v-bind:coin="coin"
+                        class="tick">
+                    </tr>
                 </tbody>
             </table>
         </section>
         <section>
             <div class="sidebar">
-                <component-detail v-bind:coin="activeCoinData" v-show="activeCoin"></component-detail>
+                <!-- <component-detail v-bind:coin="activeCoinData" v-show="activeCoin"></component-detail>
                 <component-chart
                     v-if="activeCoin"
                     v-bind:coin="activeCoinData">
-                </component-chart>
+                </component-chart> -->
 
                 <h1>Watchlist</h1>
 
@@ -81,27 +86,24 @@
 
                 <h2>Add coin</h2>
 
-                <form class="form" v-on:submit="onSubmitForm">
+                <!-- <form class="form" v-on:submit="onSubmitForm">
                     <select v-model="watchlistForm.coin" name="coin" required>
                         <option v-bind:value="coin.short" v-for="coin in coins">{{coin.long}}</option>
                     </select>
                     <input v-model.number="watchlistForm.investment" type="number" min="0" placeholder="Amount to invest ($)" name="investment" required>
-                    <!-- <input v-model.number="watchlistForm.amount" type="number" min="0" placeholder="Amount" name="amount" required> -->
                     <input type="submit" value="Add" class="button">
-                </form>
+                </form> -->
             </div>
         </section>
     </div>
-    <component-loader v-bind:is-loading="isLoading"></component-loader>
-
+    <component-loader></component-loader>
     <component-pagination
         v-bind:total-pages="totalPages"
         v-bind:current-page="currentPage"
-        v-bind:per-page="perPage"
-        v-on:selected="onPageSelected">
+        v-bind:per-page="perPage">
     </component-pagination>
 </div>
 
-<script src="/dist/js/bundle.js" async></script>
+<script type="module" src="/dist/js/bundle.js" async></script>
 </body>
 </html>

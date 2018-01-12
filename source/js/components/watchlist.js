@@ -20,34 +20,44 @@ const template = `<tr>
 				</tr>`;
 
 const watchlist = Vue.component('component-watchlist', {
-	props: {
-		pricePurchase: {
-			type: Number,
-			default: 0,
-		},
+	// props: {
+	// 	pricePurchase: {
+	// 		type: Number,
+	// 		default: 0,
+	// 	},
 
-		price: {
-			type: Number,
-			default: 0,
-		},
+	// 	price: {
+	// 		type: Number,
+	// 		default: 0,
+	// 	},
 
-		long: {
-			type: String,
-			default: 'Long',
-		},
+	// 	long: {
+	// 		type: String,
+	// 		default: 'Long',
+	// 	},
 
-		amount: {
-			type: Number,
-			default: 0,
-		},
+	// 	amount: {
+	// 		type: Number,
+	// 		default: 0,
+	// 	},
 
-		investment: {
-			type: Number,
-			default: 0,
-		},
-	},
+	// 	investment: {
+	// 		type: Number,
+	// 		default: 0,
+	// 	},
+	// },
 
 	template,
+
+	mounted() {
+		// this.getWatchlistData();
+
+		// const data = await this.getData(`${BASE_URL}/front`);
+
+		// this.setData(data);
+
+		console.log('mounted watchlist', this.$store);
+	},
 
 	computed: {
 		value() {

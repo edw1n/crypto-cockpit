@@ -1,113 +1,73 @@
 import Vue from 'vue/dist/vue.js';
-import io from 'socket.io-client';
+import { mapState, mapGetters } from 'vuex';
 
-import './components/pagination';
-import './components/chart';
-import './components/coin';
-import './components/detail';
-import './components/favorites';
-import './components/watchlist';
-import './components/loader';
+import store from './store';
 
-const BASE_URL = 'https://coincap.io';
-const SOCKET = io.connect(BASE_URL);
+import Paging from './components/pagination';
+// import './components/chart';
+import Coin from './components/coin';
+// import './components/detail';
+// import './components/watchlist';
+import Loader from './components/loader';
 
 const app = new Vue({
 	el: '.js-app',
+	store,
 
-	data() {
-		return {
-			isLoading: false,
-
-			coins: [],
-			activeCoin: null,
-
-			favorites: ['IOT', 'NEO', 'ETH'],
-
-			search: '',
-
-			perPage: 20,
-			currentPage: 0,
-
-			watchlist: [],
-			watchlistForm: {
-				coin: null,
-				investment: null,
-				amount: null,
-			},
-		};
+	components: {
+		'component-coin': Coin,
+		'component-loader': Loader,
+		'component-pagination': Paging,
 	},
+
+	mounted() {
+		this.$store.dispatch('getData');
+	},
+
+	// map 'store.state.xx' to 'this.xx'
+	computed: Object.assign(
+		mapState([
+			'coins',
+			'currentPage',
+			'perPage',
+			'watchlist',
+		]),
+		mapGetters([
+			'coinsOnPage',
+			'totalPages',
+		]),
+		{
+			// https://vuex.vuejs.org/en/forms.html
+			perPage: {
+				get() {
+					return this.$store.state.perPage;
+				},
+				set(value) {
+					this.$store.commit('setPerPage', value);
+				},
+			},
+			search: {
+				get() {
+					return this.$store.state.search;
+				},
+				set(value) {
+					this.$store.commit('setSearch', value);
+				},
+			},
+		}
+	),
 
 	watch: {
 		search() {
-			this.currentPage = 0;
+			this.$store.commit('setPage', 0);
 		},
 
 		perPage() {
-			this.currentPage = 0;
+			this.$store.commit('setPage', 0);
 		},
-	},
-
-	computed: {
-		activeCoinData() {
-			return this.coins.find(c => c.short === this.activeCoin) || {};
-		},
-
-		coinsFavorites() {
-			return this.coins.filter(c => this.favorites.includes(c.short));
-		},
-
-		coinsFiltered() {
-			return this.coins.filter(c => c.long.toLowerCase().includes(this.search.toLowerCase())); // eslint-disable-line max-len
-		},
-
-		totalPages() {
-			return Math.ceil(this.coinsFiltered.length / this.perPage);
-		},
-
-		coinsOnPage() {
-			if (!this.coins) {
-				return [];
-			}
-
-			const start = this.currentPage * this.perPage;
-			const end = Math.min(start + this.perPage, this.coinsFiltered.length); // eslint-disable-line max-len
-
-			return this.coinsFiltered.slice(start, end);
-		},
-	},
-
-	async mounted() {
-		this.getWatchlistData();
-
-		const data = await this.getData(`${BASE_URL}/front`);
-
-		this.setData(data);
-
-		SOCKET.on('trades', trade => this.onTrade(trade));
 	},
 
 	methods: {
-		async getData(url) {
-			this.isLoading = true;
-
-			const result = await fetch(url);
-			const json = await result.json();
-
-			this.isLoading = false;
-
-			return json;
-		},
-
-		setData(json) {
-			this.coins = json;
-			this.coins.forEach(this.updateWatchlist);
-		},
-
-		setActiveCoin(coin) {
-			this.activeCoin = coin;
-		},
-
 		onTrade(trade) {
 			const coin = this.coins.find(c => c.short === trade.msg.short);
 
@@ -147,7 +107,7 @@ const app = new Vue({
 		},
 
 		updateWatchlist(trade) {
-			const coinsInWatchlist = this.watchlist.filter(w => trade.short === w.short); // eslint-disable-line max-len
+			const coinsInWatchlist = this.watchlist.filter(w => trade.short === w.short);
 
 			if (!coinsInWatchlist.length) {
 				return;
@@ -156,10 +116,6 @@ const app = new Vue({
 			coinsInWatchlist.forEach((c) => {
 				c.price = trade.price;
 			});
-		},
-
-		onPageSelected(page) {
-			this.currentPage = page;
 		},
 	},
 });
