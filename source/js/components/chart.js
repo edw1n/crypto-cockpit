@@ -20,7 +20,7 @@ const config = {
 	loading: {
 		style: {
 			backgroundColor: '#13181c',
-			opacity: 0.75,
+			opacity: 0.8,
 		},
 	},
 	series: [{

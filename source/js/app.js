@@ -5,6 +5,7 @@ import './components/pagination';
 import './components/chart';
 import './components/coin';
 import './components/detail';
+import './components/favorites';
 import './components/watchlist';
 import './components/loader';
 
@@ -20,6 +21,8 @@ const app = new Vue({
 
 			coins: [],
 			activeCoin: null,
+
+			favorites: ['IOT', 'NEO', 'ETH'],
 
 			search: '',
 
@@ -48,6 +51,10 @@ const app = new Vue({
 	computed: {
 		activeCoinData() {
 			return this.coins.find(c => c.short === this.activeCoin) || {};
+		},
+
+		coinsFavorites() {
+			return this.coins.filter(c => this.favorites.includes(c.short));
 		},
 
 		coinsFiltered() {
