@@ -1,4 +1,4 @@
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 
 const template = `
 	<div class="paging" v-if="hasPages">
@@ -29,6 +29,14 @@ export default {
 			'totalPages',
 		]),
 		{
+			perPage() {
+				return this.$store.state.coins.perPage;
+			},
+
+			currentPage() {
+				return this.$store.state.coins.currentPage;
+			},
+
 			hasPages() {
 				return this.totalPages > 1;
 			},
@@ -47,16 +55,6 @@ export default {
 
 			lastDisabled() {
 				return this.currentPage === this.totalPages - 1;
-			},
-			perPage: {
-				get() {
-					return this.$store.state.coins.perPage;
-				},
-			},
-			currentPage: {
-				get() {
-					return this.$store.state.coins.currentPage;
-				},
 			},
 		}
 	),
