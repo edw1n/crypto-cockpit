@@ -12,7 +12,7 @@ const { locale } = document.documentElement.dataset;
 Vue.use(Vuex);
 
 const createWebSocketPlugin = socket => (store) => {
-	SOCKET.on('trades', trade => store.commit('tick', trade));
+	SOCKET.on('trades', trade => store.commit('setTick', trade));
 };
 
 export default new Vuex.Store({
@@ -61,32 +61,32 @@ export default new Vuex.Store({
 	},
 
 	mutations: {
-		loading(state, isLoading = true) {
+		setLoading(state, isLoading = true) {
 			state.isLoading = isLoading;
 		},
 
-		coins(state, coins) {
+		setCoins(state, coins) {
 			state.coins = coins;
 			// this.coins.forEach(this.updateWatchlist);
 		},
 
-		activeCoin(state, coin) {
+		setActiveCoin(state, coin) {
 			state.activeCoin = coin;
 		},
 
-		page(state, page) {
+		setPage(state, page) {
 			state.currentPage = page;
 		},
 
-		perPage(state, page) {
+		setPerPage(state, page) {
 			state.perPage = page;
 		},
 
-		search(state, search) {
+		setSearch(state, search) {
 			state.search = search;
 		},
 
-		tick(state, trade) {
+		setTick(state, trade) {
 			const coin = state.coins.find(c => c.short === trade.msg.short);
 
 			if (!coin) {
@@ -103,13 +103,13 @@ export default new Vuex.Store({
 
 	actions: {
 		async getData({ commit, state }, url = `${BASE_URL}/front`) {
-			commit('loading');
+			commit('setLoading');
 
 			const result = await fetch(url);
 			const coins = await result.json();
 
-			commit('coins', coins);
-			commit('loading', false);
+			commit('setCoins', coins);
+			commit('setLoading', false);
 		},
 	},
 });

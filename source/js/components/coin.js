@@ -63,7 +63,7 @@ export default {
 
 	methods: {
 		setActive(e) {
-			this.$store.commit('activeCoin', this.coin);
+			this.$store.commit('setActiveCoin', this.coin);
 		},
 
 		showChart(e) {

@@ -115,7 +115,7 @@ export default {
 		},
 
 		setPage(page) {
-			this.$store.commit('page', page);
+			this.$store.commit('setPage', page);
 		},
 	},
 };

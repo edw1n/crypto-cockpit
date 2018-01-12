@@ -43,7 +43,7 @@ const app = new Vue({
 					return this.$store.state.perPage;
 				},
 				set(value) {
-					this.$store.commit('perPage', value);
+					this.$store.commit('setPerPage', value);
 				},
 			},
 			search: {
@@ -51,7 +51,7 @@ const app = new Vue({
 					return this.$store.state.search;
 				},
 				set(value) {
-					this.$store.commit('search', value);
+					this.$store.commit('setSearch', value);
 				},
 			},
 		}
@@ -59,11 +59,11 @@ const app = new Vue({
 
 	watch: {
 		search() {
-			this.$store.commit('page', 0);
+			this.$store.commit('setPage', 0);
 		},
 
 		perPage() {
-			this.$store.commit('page', 0);
+			this.$store.commit('setPage', 0);
 		},
 	},
 
