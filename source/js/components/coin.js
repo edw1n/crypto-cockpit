@@ -87,7 +87,13 @@ export default {
 				}
 
 				// Fallback timer for when a transition isn't set nor supported
-				timer = setTimeout(() => onTransitionEnd, 300);
+				timer = setTimeout(() => {
+					el.removeEventListener('transitionend', onTransitionEnd);
+
+					el.classList.remove(positiveClass, negativeClass);
+
+					clearTimeout(timer);
+				}, 300);
 
 				el.addEventListener('transitionend', onTransitionEnd, false);
 
