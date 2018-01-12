@@ -13,11 +13,11 @@
         <section>
             <h1>Coins</h1>
 
-            <div class="group" v-if="favorites.length">
+            <!-- <div class="group" v-if="favorites.length">
                     <component-favorites
                         v-for="favorite in coinsFavorites" v-bind:key="favorite.short" v-bind:favorite="favorite">
                     </component-favorites>
-            </div>
+            </div> -->
 
             <input type="text" v-model="search" />
             <select v-model.number="perPage">
