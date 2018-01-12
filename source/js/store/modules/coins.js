@@ -81,7 +81,19 @@ export default {
 		},
 
 		connect({ commit, state }) {
-			socket.on('trades', trade => commit('setTick', trade));
+			const tick = trade => commit('setTick', trade);
+
+			window.addEventListener('online', (e) => {
+				console.log('navigator.onLine', navigator.onLine);
+
+				socket.on('trades', tick);
+			});
+
+			window.addEventListener('offline', (e) => {
+				console.log('navigator.onLine', navigator.onLine);
+
+				socket.off('trades', tick);
+			});
 		},
 	},
 };
