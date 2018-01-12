@@ -82,6 +82,10 @@ export default new Vuex.Store({
 			state.perPage = page;
 		},
 
+		search(state, search) {
+			state.search = search;
+		},
+
 		trade(state, trade) {
 			const coin = state.coins.find(c => c.short === trade.msg.short);
 

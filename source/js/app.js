@@ -46,6 +46,14 @@ const app = new Vue({
 					this.$store.commit('perPage', value);
 				},
 			},
+			search: {
+				get() {
+					return this.$store.state.search;
+				},
+				set(value) {
+					this.$store.commit('search', value);
+				},
+			},
 		}
 	),
 
