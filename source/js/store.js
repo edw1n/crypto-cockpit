@@ -12,7 +12,7 @@ const { locale } = document.documentElement.dataset;
 Vue.use(Vuex);
 
 const createWebSocketPlugin = socket => (store) => {
-	SOCKET.on('trades', trade => store.commit('trade', trade));
+	SOCKET.on('trades', trade => store.commit('tick', trade));
 };
 
 export default new Vuex.Store({
@@ -86,7 +86,7 @@ export default new Vuex.Store({
 			state.search = search;
 		},
 
-		trade(state, trade) {
+		tick(state, trade) {
 			const coin = state.coins.find(c => c.short === trade.msg.short);
 
 			if (!coin) {
