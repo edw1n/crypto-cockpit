@@ -20,8 +20,10 @@ const app = new Vue({
 		'component-pagination': Paging,
 	},
 
-	mounted() {
-		this.$store.dispatch('getData');
+	async mounted() {
+		await this.$store.dispatch('getData');
+
+		this.$store.dispatch('connect');
 	},
 
 	// map 'store.state.xx' to 'this.xx'
@@ -29,18 +31,16 @@ const app = new Vue({
 		mapState([
 			'coins',
 			'currentPage',
-			'perPage',
 			'watchlist',
 		]),
 		mapGetters([
 			'coinsOnPage',
-			'totalPages',
 		]),
 		{
 			// https://vuex.vuejs.org/en/forms.html
 			perPage: {
 				get() {
-					return this.$store.state.perPage;
+					return this.$store.state.coins.perPage;
 				},
 				set(value) {
 					this.$store.commit('setPerPage', value);
@@ -48,7 +48,7 @@ const app = new Vue({
 			},
 			search: {
 				get() {
-					return this.$store.state.search;
+					return this.$store.state.coins.search;
 				},
 				set(value) {
 					this.$store.commit('setSearch', value);

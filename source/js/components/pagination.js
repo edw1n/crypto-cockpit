@@ -1,4 +1,4 @@
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 
 const template = `
 	<div class="paging" v-if="hasPages">
@@ -15,20 +15,9 @@ const template = `
 export default {
 	template,
 
-	props: {
-		totalPages: {
-			type: Number,
-			required: true,
-		},
-
-		maxPages: {
-			default: 4,
-			type: Number,
-		},
-	},
-
 	data() {
 		return {
+			maxPages: 4,
 			hasFirst: false,
 			hasLast: false,
 			pages: [],
@@ -36,11 +25,18 @@ export default {
 	},
 
 	computed: Object.assign(
-		mapState([
-			'currentPage',
-			'perPage',
+		mapGetters([
+			'totalPages',
 		]),
 		{
+			perPage() {
+				return this.$store.state.coins.perPage;
+			},
+
+			currentPage() {
+				return this.$store.state.coins.currentPage;
+			},
+
 			hasPages() {
 				return this.totalPages > 1;
 			},
