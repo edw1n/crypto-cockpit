@@ -4,6 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto - Vue.js</title>
 
+    <link rel="manifest" href="/manifest.json">
+	<meta name="theme-color" content="#262d33">
+
     <link rel="stylesheet" media="screen" href="/dist/css/main.css" />
 </head>
 <body>
@@ -28,26 +31,28 @@
                 <option value="50">50</option>
             </select>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th class="text-right">Market Cap</th>
-                        <th class="text-right">Price</th>
-                        <th class="text-right">Available Supply</th>
-                        <th class="text-right">%24hr</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr is="component-coin"
-                        v-for="coin in coinsOnPage"
-                        v-bind:key="coin.short"
-                        v-bind:coin="coin"
-                        class="tick">
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="text-right">Market Cap</th>
+                            <th class="text-right">Price</th>
+                            <th class="text-right">Available Supply</th>
+                            <th class="text-right">%24hr</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr is="component-coin"
+                            v-for="coin in coinsOnPage"
+                            v-bind:key="coin.short"
+                            v-bind:coin="coin"
+                            class="tick">
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
         <section>
             <div class="sidebar">

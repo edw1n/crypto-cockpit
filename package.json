@@ -12,7 +12,8 @@
     "browsersync": "browser-sync start --files \"dist/css/*.css, *.html, dist/js/*.js\" --server",
     "start": "parallelshell \"npm run sass:build\" \"npm run sass:watch\" \"npm run watch:bundle\" \"npm run browsersync\"",
     "build:bundle": "browserify source/js/app.js -o dist/js/bundle.js -t [ babelify ]",
-    "watch:bundle": "watchify source/js/app.js -o dist/js/bundle.js -t [ babelify ]"
+    "watch:bundle": "watchify source/js/app.js -o dist/js/bundle.js -t [ babelify ]",
+    "build:sw": "browserify source/js/sw.js -o sw.js -t [ babelify ]"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
