@@ -1,5 +1,5 @@
 import Vue from 'vue/dist/vue.js';
-import { mapGetters, mapState } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 
 import store from './store';
 
@@ -14,23 +14,17 @@ const app = new Vue({
 	el: '.js-app',
 	store,
 
-	// watch: {
-	// 	search() {
-	// 		this.currentPage = 0;
-	// 	},
-
-	// 	perPage() {
-	// 		this.currentPage = 0;
-	// 	},
-	// },
-
 	components: {
 		'component-coin': Coin,
 		'component-loader': Loader,
 		'component-pagination': Paging,
 	},
 
-	// map this.xx to store.state.xx
+	mounted() {
+		this.$store.dispatch('getData');
+	},
+
+	// map 'store.state.xx' to 'this.xx'
 	computed: Object.assign(
 		mapState([
 			'coins',
@@ -41,13 +35,28 @@ const app = new Vue({
 		mapGetters([
 			'coinsOnPage',
 			'totalPages',
-		])
+		]),
+		{
+			// https://vuex.vuejs.org/en/forms.html
+			perPage: {
+				get() {
+					return this.$store.state.perPage;
+				},
+				set(value) {
+					this.$store.commit('perPage', value);
+				},
+			},
+		}
 	),
 
-	mounted() {
-		console.log('mounted app', this.$store);
+	watch: {
+		search() {
+			this.$store.commit('page', 0);
+		},
 
-		this.$store.dispatch('getData');
+		perPage() {
+			this.$store.commit('page', 0);
+		},
 	},
 
 	methods: {
@@ -90,7 +99,7 @@ const app = new Vue({
 		},
 
 		updateWatchlist(trade) {
-			const coinsInWatchlist = this.watchlist.filter(w => trade.short === w.short); // eslint-disable-line max-len
+			const coinsInWatchlist = this.watchlist.filter(w => trade.short === w.short);
 
 			if (!coinsInWatchlist.length) {
 				return;
@@ -99,10 +108,6 @@ const app = new Vue({
 			coinsInWatchlist.forEach((c) => {
 				c.price = trade.price;
 			});
-		},
-
-		onPageSelected(page) {
-			this.$store.commit('page', page);
 		},
 	},
 });

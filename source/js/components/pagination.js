@@ -16,16 +16,6 @@ export default {
 	template,
 
 	props: {
-		// currentPage: {
-		// 	default: 1,
-		// 	type: Number,
-		// },
-
-		// perPage: {
-		// 	type: Number,
-		// 	required: true,
-		// },
-
 		totalPages: {
 			type: Number,
 			required: true,
@@ -124,8 +114,8 @@ export default {
 			this.setPage(this.totalPages - 1);
 		},
 
-		setPage(index) {
-			this.$emit('selected', index);
+		setPage(page) {
+			this.$store.commit('page', page);
 		},
 	},
 };

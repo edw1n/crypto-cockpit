@@ -78,6 +78,10 @@ export default new Vuex.Store({
 			state.currentPage = page;
 		},
 
+		perPage(state, page) {
+			state.perPage = page;
+		},
+
 		trade(state, trade) {
 			const coin = state.coins.find(c => c.short === trade.msg.short);
 
