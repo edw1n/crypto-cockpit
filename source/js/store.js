@@ -1,18 +1,26 @@
 import Vue from 'vue/dist/vue.js';
 import Vuex from 'vuex';
 
-// import io from 'socket.io-client';
+import io from 'socket.io-client';
 
 const BASE_URL = 'https://coincap.io';
 
-// const SOCKET = io.connect(BASE_URL);
+const SOCKET = io.connect(BASE_URL);
 
 const { locale } = document.documentElement.dataset;
 
 Vue.use(Vuex);
 
+const createWebSocketPlugin = socket => (store) => {
+	SOCKET.on('trades', trade => store.commit('trade', trade));
+};
+
 export default new Vuex.Store({
 	strict: true,
+
+	plugins: [
+		createWebSocketPlugin(SOCKET),
+	],
 
 	state: {
 		locale,
@@ -69,6 +77,20 @@ export default new Vuex.Store({
 		page(state, page) {
 			state.currentPage = page;
 		},
+
+		trade(state, trade) {
+			const coin = state.coins.find(c => c.short === trade.msg.short);
+
+			if (!coin) {
+				return;
+			}
+
+			const direction = trade.msg.price > coin.price ? 1 : -1;
+
+			Object.assign(coin, trade.msg, { tickDirection: direction });
+
+			// this.updateWatchlist(trade.msg);
+		},
 	},
 
 	actions: {
@@ -77,8 +99,6 @@ export default new Vuex.Store({
 
 			const result = await fetch(url);
 			const coins = await result.json();
-
-			console.log('coins', coins);
 
 			commit('coins', coins);
 			commit('loading', false);
