@@ -3,7 +3,7 @@ import { mapGetters, mapState } from 'vuex';
 
 import store from './store';
 
-// import './components/pagination';
+import Paging from './components/pagination';
 // import './components/chart';
 import Coin from './components/coin';
 // import './components/detail';
@@ -27,33 +27,30 @@ const app = new Vue({
 	components: {
 		'component-coin': Coin,
 		'component-loader': Loader,
+		'component-pagination': Paging,
 	},
 
 	// map this.xx to store.state.xx
-	computed: Object.assign(mapState([
-		'coins',
-		'currentPage',
-		'perPage',
-		'watchlist',
-	]), mapGetters([
-		'coinsOnPage',
-		'totalPages',
-	])),
+	computed: Object.assign(
+		mapState([
+			'coins',
+			'currentPage',
+			'perPage',
+			'watchlist',
+		]),
+		mapGetters([
+			'coinsOnPage',
+			'totalPages',
+		])
+	),
 
 	mounted() {
 		console.log('mounted app', this.$store);
 
 		this.$store.dispatch('getData');
-
-		// SOCKET.on('trades', trade => this.onTrade(trade));
 	},
 
 	methods: {
-		// setData(json) {
-		// 	this.coins = json;
-		// 	this.coins.forEach(this.updateWatchlist);
-		// },
-
 		onTrade(trade) {
 			const coin = this.coins.find(c => c.short === trade.msg.short);
 

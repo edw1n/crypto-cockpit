@@ -1,5 +1,3 @@
-// import { mapState } from 'vuex';
-
 const positiveClass = 'tick--positive';
 const negativeClass = 'tick--negative';
 

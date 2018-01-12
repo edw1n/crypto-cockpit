@@ -1,28 +1,30 @@
-import Vue from 'vue/dist/vue.js';
+import { mapState } from 'vuex';
 
-const template = `<div class="paging" v-if="hasPages">
-	<button v-bind:disabled="firstDisabled" v-on:click="gotoFirstPage" class="paging__link"><<</button>
-	<button v-bind:disabled="previousDisabled" v-on:click="gotoPreviousPage" class="paging__link"><</button>
+const template = `
+	<div class="paging" v-if="hasPages">
+		<button v-bind:disabled="firstDisabled" v-on:click="gotoFirstPage" class="paging__link"><<</button>
+		<button v-bind:disabled="previousDisabled" v-on:click="gotoPreviousPage" class="paging__link"><</button>
 
-	<button v-for="page in pages" class="paging__link" v-bind:class="{'is-active': page.page === currentPage}" v-on:click="setPage(page.page)">{{ page.label }}</button>
+		<button v-for="page in pages" class="paging__link" v-bind:class="{'is-active': page.page === currentPage}" v-on:click="setPage(page.page)">{{ page.label }}</button>
 
-	<button v-bind:disabled="nextDisabled" v-on:click="gotoNextPage" class="paging__link">></button>
-	<button v-bind:disabled="lastDisabled" v-on:click="gotoLastPage" class="paging__link">>></button>
-</div>`;
+		<button v-bind:disabled="nextDisabled" v-on:click="gotoNextPage" class="paging__link">></button>
+		<button v-bind:disabled="lastDisabled" v-on:click="gotoLastPage" class="paging__link">>></button>
+	</div>
+`;
 
-const pagination = Vue.component('component-pagination', {
+export default {
 	template,
 
 	props: {
-		currentPage: {
-			default: 1,
-			type: Number,
-		},
+		// currentPage: {
+		// 	default: 1,
+		// 	type: Number,
+		// },
 
-		perPage: {
-			type: Number,
-			required: true,
-		},
+		// perPage: {
+		// 	type: Number,
+		// 	required: true,
+		// },
 
 		totalPages: {
 			type: Number,
@@ -43,27 +45,33 @@ const pagination = Vue.component('component-pagination', {
 		};
 	},
 
-	computed: {
-		hasPages() {
-			return this.totalPages > 1;
-		},
+	computed: Object.assign(
+		mapState([
+			'currentPage',
+			'perPage',
+		]),
+		{
+			hasPages() {
+				return this.totalPages > 1;
+			},
 
-		previousDisabled() {
-			return this.currentPage === 0;
-		},
+			previousDisabled() {
+				return this.currentPage === 0;
+			},
 
-		firstDisabled() {
-			return this.currentPage === 0;
-		},
+			firstDisabled() {
+				return this.currentPage === 0;
+			},
 
-		nextDisabled() {
-			return this.currentPage === this.totalPages - 1;
-		},
+			nextDisabled() {
+				return this.currentPage === this.totalPages - 1;
+			},
 
-		lastDisabled() {
-			return this.currentPage === this.totalPages - 1;
-		},
-	},
+			lastDisabled() {
+				return this.currentPage === this.totalPages - 1;
+			},
+		}
+	),
 
 	watch: {
 		totalPages() {
@@ -73,10 +81,6 @@ const pagination = Vue.component('component-pagination', {
 		currentPage() {
 			this.createPagination();
 		},
-	},
-
-	created() {
-		/* */
 	},
 
 	methods: {
@@ -124,6 +128,4 @@ const pagination = Vue.component('component-pagination', {
 			this.$emit('selected', index);
 		},
 	},
-});
-
-export default pagination;
+};

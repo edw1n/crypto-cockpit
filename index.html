@@ -14,13 +14,13 @@
             <h1>Coins</h1>
 
             <!-- <input type="text" v-model="search" /> -->
-            <select v-model.number="perPage">
+            <!-- <select v-model.number="perPage">
                 <option value="10">10</option>
                 <option value="20">20</option>
                 <option value="30">30</option>
                 <option value="40">40</option>
                 <option value="50">50</option>
-            </select>
+            </select> -->
 
             <table>
                 <thead>
@@ -91,13 +91,12 @@
         </section>
     </div>
     <component-loader></component-loader>
-
-    <!-- <component-pagination
+    <component-pagination
         v-bind:total-pages="totalPages"
         v-bind:current-page="currentPage"
         v-bind:per-page="perPage"
         v-on:selected="onPageSelected">
-    </component-pagination> -->
+    </component-pagination>
 </div>
 
 <script type="module" src="/dist/js/bundle.js" async></script>
