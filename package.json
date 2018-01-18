@@ -6,14 +6,14 @@
     "lint": "stylelint source/scss/**/*.scss",
     "clean": "rimraf dist/css/*, dist/js/*",
     "prebuild": "npm run clean",
-    "build": "npm run sass:build && npm run build:bundle && npm run sw",
+    "build": "npm run sass:build && npm run js:build && npm run serviceworker",
     "sass:build": "node-sass source/scss/ -o dist/css/ --output-style uncompressed",
     "sass:watch": "npm run sass:build -- -w",
+    "js:build": "browserify source/js/app.js -o dist/js/bundle.js -t [ babelify ]",
+    "js:watch": "watchify source/js/app.js -o dist/js/bundle.js -t [ babelify ]",
     "browsersync": "browser-sync start --files \"dist/css/*.css, *.html, dist/js/*.js\" --server",
-    "start": "parallelshell \"npm run sass:build\" \"npm run sass:watch\" \"npm run watch:bundle\" \"npm run browsersync\"",
-    "build:bundle": "browserify source/js/app.js -o dist/js/bundle.js -t [ babelify ]",
-    "watch:bundle": "watchify source/js/app.js -o dist/js/bundle.js -t [ babelify ]",
-    "sw": "sw-precache --config=sw-precache-config.js --verbose"
+    "start": "parallelshell \"npm run sass:build\" \"npm run sass:watch\" \"npm run js:watch\" \"npm run browsersync\"",
+    "serviceworker": "sw-precache --config=sw-precache-config.js --verbose"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
