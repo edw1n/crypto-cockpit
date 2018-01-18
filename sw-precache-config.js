@@ -1,12 +1,13 @@
 module.exports = {
 	staticFileGlobs: [
-		'/',
-		'/dist/css/**.css',
-		'/dist/js/**.js',
+		'*.html',
+		'manifest.json',
+		'dist/css/*.css',
+		'dist/js/*.js',
 	],
 	// stripPrefix: 'dist/',
 	runtimeCaching: [{
-		urlPattern: /^https:\/\/coincap\.io/,
+		urlPattern: /^https:\/\/coincap\.io\/front/,
 		handler: 'networkFirst'
 	}]
 };
