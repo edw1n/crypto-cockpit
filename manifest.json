@@ -1,11 +1,11 @@
 {
-  "name": "Vue.js - Crypto",
+  "name": "PWA Proto",
   "short_name": "Crypto",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#262d33",
   "theme_color": "#2f3a41",
-  "description": "Crypto PWA with Vue.js.",
+  "description": "PWA Proto with Vue.js.",
   "icons": [
     {
       "src": "/img/favicons/192.png",

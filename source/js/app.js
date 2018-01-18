@@ -10,9 +10,7 @@ import Coin from './components/coin';
 // import './components/watchlist';
 import Loader from './components/loader';
 
-if ('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('/sw.js');
-}
+import './service-worker-registration';
 
 const app = new Vue({
 	el: '.js-app',
