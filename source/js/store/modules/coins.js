@@ -1,8 +1,4 @@
-import io from 'socket.io-client';
-
-const BASE_URL = 'https://coincap.io';
-
-const socket = io.connect(BASE_URL);
+import api from '../../api';
 
 export default {
 	state: {
@@ -70,30 +66,20 @@ export default {
 	},
 
 	actions: {
-		async getData({ commit, state }, url = `${BASE_URL}/front`) {
-			commit('setLoading');
-
-			const result = await fetch(url);
-			const coins = await result.json();
+		async getCoins({ commit, state }) {
+			const coins = await api.getCoins();
 
 			commit('setCoins', coins);
-			commit('setLoading', false);
 		},
 
 		connect({ commit, state }) {
+			const socket = api.connect();
 			const tick = trade => commit('setTick', trade);
 
-			window.addEventListener('online', (e) => {
-				console.log('navigator.onLine', navigator.onLine);
+			socket.on('trades', tick);
 
-				socket.on('trades', tick);
-			});
-
-			window.addEventListener('offline', (e) => {
-				console.log('navigator.onLine', navigator.onLine);
-
-				socket.off('trades', tick);
-			});
+			window.addEventListener('online', e => socket.on('trades', tick));
+			window.addEventListener('offline', e => socket.off('trades', tick));
 		},
 	},
 };

@@ -10,9 +10,9 @@ import Coin from './components/coin';
 // import './components/watchlist';
 import Loader from './components/loader';
 
-if ('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('/sw.js');
-}
+// if ('serviceWorker' in navigator) {
+// 	navigator.serviceWorker.register('/sw.js');
+// }
 
 const app = new Vue({
 	el: '.js-app',
@@ -25,8 +25,11 @@ const app = new Vue({
 	},
 
 	async mounted() {
-		await this.$store.dispatch('getData');
+		this.$store.commit('setLoading');
 
+		await this.$store.dispatch('getCoins');
+
+		this.$store.commit('setLoading', false);
 		this.$store.dispatch('connect');
 	},
 
