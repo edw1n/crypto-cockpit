@@ -2,7 +2,7 @@ import io from 'socket.io-client';
 
 const BASE_URL = 'https://coincap.io';
 
-const socket = io.connect(BASE_URL);
+let socket;
 
 export default {
 	state: {
@@ -83,8 +83,17 @@ export default {
 		connect({ commit, state }) {
 			const tick = trade => commit('setTick', trade);
 
+			if (navigator.onLine) {
+				socket = io.connect(BASE_URL);
+				socket.on('trades', tick);
+			}
+
 			window.addEventListener('online', (e) => {
 				console.log('navigator.onLine', navigator.onLine);
+
+				if (!socket) {
+					socket = io.connect(BASE_URL);
+				}
 
 				socket.on('trades', tick);
 			});
@@ -92,7 +101,7 @@ export default {
 			window.addEventListener('offline', (e) => {
 				console.log('navigator.onLine', navigator.onLine);
 
-				socket.off('trades', tick);
+				socket && socket.off('trades', tick);
 			});
 		},
 	},
