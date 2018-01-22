@@ -12,7 +12,7 @@
 <body>
 
 <div class="js-app">
-    <div class="grid"> <!-- v-if="coins.length" -->
+    <div class="grid" v-show="coins.coins.length"> <!-- v-if="coins.length" -->
         <section>
             <h1>Coins</h1>
 
@@ -64,7 +64,7 @@
 
                 <h1>Watchlist</h1>
 
-                <table v-if="watchlist.length">
+                <table v-if="watchlist.items.length">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -77,7 +77,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr is="component-watchlist" v-for="watchitem in watchlist"
+                        <tr is="component-watchlist" v-for="watchitem in watchlist.items"
                             v-bind:long="watchitem.long"
                             v-bind:short="watchitem.short"
                             v-bind:price-purchase="watchitem.pricePurchase"
@@ -91,13 +91,13 @@
 
                 <h2>Add coin</h2>
 
-                <!-- <form class="form" v-on:submit="onSubmitForm">
-                    <select v-model="watchlistForm.coin" name="coin" required>
-                        <option v-bind:value="coin.short" v-for="coin in coins">{{coin.long}}</option>
+                <form class="form" v-on:submit="onSubmitForm">
+                    <select v-model="watchlistFormCoin" name="coin" required>
+                        <option v-bind:value="coin.short" v-for="coin in coins.coins">{{coin.long}}</option>
                     </select>
-                    <input v-model.number="watchlistForm.investment" type="number" min="0" placeholder="Amount to invest ($)" name="investment" required>
+                    <input v-model.number="watchlistFormInvestment" type="number" min="0" placeholder="Amount to invest ($)" name="investment" required>
                     <input type="submit" value="Add" class="button">
-                </form> -->
+                </form>
             </div>
         </section>
     </div>

@@ -61,7 +61,7 @@ export default {
 
 			Object.assign(coin, trade.msg, { tickDirection: direction });
 
-			// this.updateWatchlist(trade.msg);
+			this.dispatch('updateWatchlist', trade.msg);
 		},
 	},
 

@@ -7,7 +7,7 @@ import Paging from './components/pagination';
 // import './components/chart';
 import Coin from './components/coin';
 // import './components/detail';
-// import './components/watchlist';
+import Watchlist from './components/watchlist';
 import Loader from './components/loader';
 
 // if ('serviceWorker' in navigator) {
@@ -22,12 +22,15 @@ const app = new Vue({
 		'component-coin': Coin,
 		'component-loader': Loader,
 		'component-pagination': Paging,
+		'component-watchlist': Watchlist,
 	},
 
 	async mounted() {
 		this.$store.commit('setLoading');
 
 		await this.$store.dispatch('getCoins');
+
+		this.$store.dispatch('getWatchlistData');
 
 		this.$store.commit('setLoading', false);
 		this.$store.dispatch('connect');
@@ -47,7 +50,7 @@ const app = new Vue({
 			// https://vuex.vuejs.org/en/forms.html
 			perPage: {
 				get() {
-					return this.$store.state.coins.perPage;
+					return this.coins.perPage;
 				},
 				set(value) {
 					this.$store.commit('setPerPage', value);
@@ -55,10 +58,26 @@ const app = new Vue({
 			},
 			search: {
 				get() {
-					return this.$store.state.coins.search;
+					return this.coins.search;
 				},
 				set(value) {
 					this.$store.commit('setSearch', value);
+				},
+			},
+			watchlistFormCoin: {
+				get() {
+					return this.watchlist.form.coin;
+				},
+				set(value) {
+					this.$store.commit('setWatchlistCoin', value);
+				},
+			},
+			watchlistFormInvestment: {
+				get() {
+					return this.watchlist.form.investment;
+				},
+				set(value) {
+					this.$store.commit('setWatchlistInvestment', value);
 				},
 			},
 		}
@@ -75,42 +94,20 @@ const app = new Vue({
 	},
 
 	methods: {
-		onTrade(trade) {
-			const coin = this.coins.find(c => c.short === trade.msg.short);
-
-			if (!coin) {
-				return;
-			}
-
-			const direction = trade.msg.price > coin.price ? 1 : -1;
-
-			Object.assign(coin, trade.msg, { tickDirection: direction });
-
-			this.updateWatchlist(trade.msg);
-		},
-
 		onSubmitForm(e) {
 			e.preventDefault();
 
-			const { watchlistForm } = this;
-			const coin = this.coins.find(c => c.short === watchlistForm.coin);
+			const { watchlist: { form } } = this;
+			const coin = this.coins.coins.find(c => c.short === form.coin);
 
-			watchlistForm.amount = Number((watchlistForm.investment / coin.price).toFixed(8)); // eslint-disable-line max-len
-			watchlistForm.pricePurchase = coin.price;
+			const data = Object.assign({}, coin, form, {
+				pricePurchase: coin.price,
+				amount: Number((form.investment / coin.price).toFixed(8)),
+			});
 
-			const data = Object.assign({}, coin, watchlistForm);
+			this.$store.commit('addToWatchlist', data);
 
-			this.watchlist.push(data);
-
-			localStorage.setItem('watchlist', JSON.stringify(this.watchlist));
-		},
-
-		getWatchlistData() {
-			const watchlist = JSON.parse(localStorage.getItem('watchlist'));
-
-			if (watchlist) {
-				this.watchlist = watchlist;
-			}
+			localStorage.setItem('watchlist', JSON.stringify(this.watchlist.items));
 		},
 
 		updateWatchlist(trade) {

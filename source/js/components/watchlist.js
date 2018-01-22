@@ -1,7 +1,3 @@
-import Vue from 'vue/dist/vue.js';
-
-const { locale } = document.documentElement.dataset;
-
 const template = `<tr>
 					<td>{{long}}</td>
 					<td class="text-right">{{ investmentFormatted }}</td>
@@ -19,45 +15,35 @@ const template = `<tr>
 					</td>
 				</tr>`;
 
-const watchlist = Vue.component('component-watchlist', {
-	// props: {
-	// 	pricePurchase: {
-	// 		type: Number,
-	// 		default: 0,
-	// 	},
+export default {
+	props: {
+		pricePurchase: {
+			type: Number,
+			default: 0,
+		},
 
-	// 	price: {
-	// 		type: Number,
-	// 		default: 0,
-	// 	},
+		price: {
+			type: Number,
+			default: 0,
+		},
 
-	// 	long: {
-	// 		type: String,
-	// 		default: 'Long',
-	// 	},
+		long: {
+			type: String,
+			default: 'Long',
+		},
 
-	// 	amount: {
-	// 		type: Number,
-	// 		default: 0,
-	// 	},
+		amount: {
+			type: Number,
+			default: 0,
+		},
 
-	// 	investment: {
-	// 		type: Number,
-	// 		default: 0,
-	// 	},
-	// },
+		investment: {
+			type: Number,
+			default: 0,
+		},
+	},
 
 	template,
-
-	mounted() {
-		// this.getWatchlistData();
-
-		// const data = await this.getData(`${BASE_URL}/front`);
-
-		// this.setData(data);
-
-		console.log('mounted watchlist', this.$store);
-	},
 
 	computed: {
 		value() {
@@ -67,7 +53,7 @@ const watchlist = Vue.component('component-watchlist', {
 		investmentFormatted() {
 			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 4 };
 
-			return this.investment.toLocaleString(locale, style);
+			return this.investment.toLocaleString(this.$store.locale, style);
 		},
 
 		performanceValue() {
@@ -77,25 +63,25 @@ const watchlist = Vue.component('component-watchlist', {
 		pricePurchaseFormatted() {
 			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 8 };
 
-			return this.pricePurchase.toLocaleString(locale, style);
+			return this.pricePurchase.toLocaleString(this.$store.locale, style);
 		},
 
 		priceFormatted() {
 			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 8 };
 
-			return this.price.toLocaleString(locale, style);
+			return this.price.toLocaleString(this.$store.locale, style);
 		},
 
 		valueFormatted() {
 			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 };
 
-			return this.value.toLocaleString(locale, style);
+			return this.value.toLocaleString(this.$store.locale, style);
 		},
 
 		performanceValueFormatted() {
 			const style = { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 4 };
 
-			return this.performanceValue.toLocaleString(locale, style); // eslint-disable-line max-len
+			return this.performanceValue.toLocaleString(this.$store.locale, style); // eslint-disable-line max-len
 		},
 
 		performancePercentage() {
@@ -105,9 +91,7 @@ const watchlist = Vue.component('component-watchlist', {
 		performancePercentageFormatted() {
 			const style = { style: 'percent', minimumFractionDigits: 4 };
 
-			return (this.performancePercentage / 100).toLocaleString(locale, style); // eslint-disable-line max-len
+			return (this.performancePercentage / 100).toLocaleString(this.$store.locale, style); // eslint-disable-line max-len
 		},
 	},
-});
-
-export default watchlist;
+};
